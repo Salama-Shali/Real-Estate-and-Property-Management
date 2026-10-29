@@ -1,7 +1,5 @@
-
-//  Defines the information stored for each tenant.
 package com.example.realestateandpropertymanagementsystem.data
-
+//  Defines the information stored for each tenant
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
@@ -14,5 +12,11 @@ data class Tenant(
     //information about tenant
     val name: String,
     val unit: String,
-    val rent: Int
+    val rent: Int,
+    val phone: String,
+    val email: String,
+    val rentDueDay: Int,
+    val leaseStartDate: Long,
+    val leaseEndDate: Long,
+    val isActive: Boolean = true // false = tenant has moved out, but we keep their record and payment history
 )
