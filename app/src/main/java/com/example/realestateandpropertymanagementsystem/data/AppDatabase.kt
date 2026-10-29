@@ -1,11 +1,11 @@
 package com.example.realestateandpropertymanagementsystem.data
-// Defines the Room database and provides access to the DAO.
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.Room
 import android.content.Context
 
 // Registers the tenant table and defines the database version.
+// Defines the Room database and provides access to the DAO.
 @Database(
     entities = [Tenant::class],
     version = 1,
