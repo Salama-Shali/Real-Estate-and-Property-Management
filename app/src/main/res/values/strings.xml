@@ -1,5 +1,12 @@
 <resources>
     <string name="app_name">Real estate and Property Management System</string>
+    <string name="tenants_title">Tenants</string>
+    <string name="no_tenants">No tenants yet.\nAdd your first tenant to get started.</string>
+    <string name="delete_tenant_title">Delete tenant?</string>
+    <string name="delete_tenant_message">Remove %1$s from your tenants? This cannot be undone.</string>
+    <string name="delete">Delete</string>
+    <string name="cancel">Cancel</string>
+    <string name="tenant_deleted">%1$s deleted</string>
     <string name="tenant_unit_format">Unit %1$s</string>
     <string name="tenant_rent_format">KES %1$d / month</string>
     <string name="tenant_phone_format">Phone: %1$s</string>
