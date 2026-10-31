@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">Real estate and Property Management System</string>
+    <string name="tenant_unit_format">Unit %1$s</string>
+    <string name="tenant_rent_format">KES %1$d / month</string>
+    <string name="tenant_phone_format">Phone: %1$s</string>
+    <string name="status_active">Active</string>
+    <string name="status_moved_out">Moved out</string>
+    <string name="delete_tenant">Delete tenant</string>
 </resources>
+
+    <!-- Text shown on each tenant row. %1$s / %1$d are placeholders filled in by code -->
