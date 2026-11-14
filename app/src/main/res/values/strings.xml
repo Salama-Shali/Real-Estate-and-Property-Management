@@ -35,6 +35,10 @@
     <string name="error_due_day">Enter a day between 1 and 31</string>
     <string name="error_dates_missing">Select both lease dates</string>
     <string name="error_dates_order">Lease end must be after lease start</string>
+    <string name="edit_tenant">Edit tenant</string>
+    <string name="save_changes">Save changes</string>
+    <string name="tenant_updated">%1$s updated</string>
+
 </resources>
 
     <!-- Text shown on each tenant row. %1$s / %1$d are placeholders filled in by code -->
