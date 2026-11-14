@@ -18,7 +18,7 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
-// Collects tenant details, validates them, and sends a new Tenant to the ViewModel.
+// One form for two jobs: add a new tenant, or edit an existing one.
 class AddTenantFragment : Fragment() {
 
     private var _binding: FragmentAddTenantBinding? = null
@@ -26,7 +26,10 @@ class AddTenantFragment : Fragment() {
 
     private val viewModel: TenantViewModel by viewModels()
 
-    // Lease dates are stored as milliseconds (Long), matching the Tenant entity.
+    // -1 = Add mode. Any other value = the id of the tenant being edited.
+    private var tenantId = -1
+    private var existingTenant: Tenant? = null
+
     private var leaseStart: Long? = null
     private var leaseEnd: Long? = null
     private val dateFormat = SimpleDateFormat("dd MMM yyyy", Locale.getDefault())
@@ -46,28 +49,61 @@ class AddTenantFragment : Fragment() {
         binding.btnStartDate.setOnClickListener {
             pickDate(getString(R.string.select_start_date)) { millis ->
                 leaseStart = millis
-                binding.btnStartDate.text =
-                    getString(R.string.start_date_format, dateFormat.format(Date(millis)))
+                showStartDate(millis)
             }
         }
         binding.btnEndDate.setOnClickListener {
             pickDate(getString(R.string.select_end_date)) { millis ->
                 leaseEnd = millis
-                binding.btnEndDate.text =
-                    getString(R.string.end_date_format, dateFormat.format(Date(millis)))
+                showEndDate(millis)
             }
         }
         binding.btnSave.setOnClickListener { saveTenant() }
+
+        // Edit mode: load the tenant and prefill the form (only once).
+        tenantId = arguments?.getInt("tenantId", -1) ?: -1
+        if (tenantId != -1) {
+            binding.tvFormTitle.text = getString(R.string.edit_tenant)
+            binding.btnSave.text = getString(R.string.save_changes)
+            viewModel.getTenantById(tenantId).observe(viewLifecycleOwner) { tenant ->
+                if (tenant != null && existingTenant == null) {
+                    existingTenant = tenant
+                    fillForm(tenant)
+                }
+            }
+        }
     }
 
-    // Shows a calendar dialog and returns the chosen date through the callback.
+    // Puts the saved tenant's values into the form fields.
+    private fun fillForm(tenant: Tenant) {
+        binding.etName.setText(tenant.name)
+        binding.etUnit.setText(tenant.unit)
+        binding.etRent.setText(tenant.rent.toString())
+        binding.etPhone.setText(tenant.phone)
+        binding.etEmail.setText(tenant.email)
+        binding.etDueDay.setText(tenant.rentDueDay.toString())
+        leaseStart = tenant.leaseStartDate
+        leaseEnd = tenant.leaseEndDate
+        showStartDate(tenant.leaseStartDate)
+        showEndDate(tenant.leaseEndDate)
+    }
+
+    private fun showStartDate(millis: Long) {
+        binding.btnStartDate.text =
+            getString(R.string.start_date_format, dateFormat.format(Date(millis)))
+    }
+
+    private fun showEndDate(millis: Long) {
+        binding.btnEndDate.text =
+            getString(R.string.end_date_format, dateFormat.format(Date(millis)))
+    }
+
     private fun pickDate(title: String, onPicked: (Long) -> Unit) {
         val picker = MaterialDatePicker.Builder.datePicker().setTitleText(title).build()
         picker.addOnPositiveButtonClickListener { onPicked(it) }
         picker.show(childFragmentManager, title)
     }
 
-    // Validates every field. Only a fully valid form is sent to the database.
     private fun saveTenant() {
         val name = binding.etName.text.toString().trim()
         val unit = binding.etUnit.text.toString().trim()
@@ -78,7 +114,6 @@ class AddTenantFragment : Fragment() {
         val start = leaseStart
         val end = leaseEnd
 
-        // Clear errors left over from a previous attempt.
         binding.tilName.error = null
         binding.tilUnit.error = null
         binding.tilRent.error = null
@@ -98,7 +133,6 @@ class AddTenantFragment : Fragment() {
         if (rent == null || rent <= 0) {
             binding.tilRent.error = getString(R.string.error_rent); valid = false
         }
-        // Kenyan mobile numbers: 07xxxxxxxx, 01xxxxxxxx or +2547xxxxxxxx / +2541xxxxxxxx
         if (!phone.matches(Regex("^(\\+254|0)[17]\\d{8}$"))) {
             binding.tilPhone.error = getString(R.string.error_phone); valid = false
         }
@@ -116,21 +150,29 @@ class AddTenantFragment : Fragment() {
 
         if (!valid) return
 
-        // The checks above guarantee these are not null.
-        viewModel.insert(
-            Tenant(
-                name = name,
-                unit = unit,
-                rent = rent!!,
-                phone = phone,
-                email = email,
-                rentDueDay = dueDay!!,
-                leaseStartDate = start!!,
-                leaseEndDate = end!!
+        val current = existingTenant
+        if (tenantId != -1) {
+            // Edit mode: wait until the saved tenant has loaded.
+            if (current == null) return
+            // copy() keeps the id and isActive, and changes only the fields we pass.
+            viewModel.update(
+                current.copy(
+                    name = name, unit = unit, rent = rent!!, phone = phone, email = email,
+                    rentDueDay = dueDay!!, leaseStartDate = start!!, leaseEndDate = end!!
+                )
             )
-        )
-        Toast.makeText(requireContext(), getString(R.string.tenant_saved, name), Toast.LENGTH_SHORT).show()
-        findNavController().popBackStack() // back to the list, which refreshes by itself
+            Toast.makeText(requireContext(), getString(R.string.tenant_updated, name), Toast.LENGTH_SHORT).show()
+        } else {
+            // Add mode: insert a brand new tenant.
+            viewModel.insert(
+                Tenant(
+                    name = name, unit = unit, rent = rent!!, phone = phone, email = email,
+                    rentDueDay = dueDay!!, leaseStartDate = start!!, leaseEndDate = end!!
+                )
+            )
+            Toast.makeText(requireContext(), getString(R.string.tenant_saved, name), Toast.LENGTH_SHORT).show()
+        }
+        findNavController().popBackStack()
     }
 
     private fun showDateError(message: String) {
