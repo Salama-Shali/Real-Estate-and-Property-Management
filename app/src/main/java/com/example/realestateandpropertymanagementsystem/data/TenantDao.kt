@@ -26,4 +26,9 @@ interface TenantDao {
     // Removes a tenant record from the database.
     @Delete
     suspend fun deleteTenant(tenant: Tenant)
+
+    // Finds one tenant by id (used to prefill the edit form).
+    @Query("SELECT * FROM tenants WHERE id = :id")
+    fun getTenantById(id: Int): LiveData<Tenant?>
+
 }

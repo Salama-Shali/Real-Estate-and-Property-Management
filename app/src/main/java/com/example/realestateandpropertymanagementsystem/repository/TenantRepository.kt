@@ -26,4 +26,7 @@ class TenantRepository(private val tenantDao: TenantDao) {
     suspend fun deleteTenant(tenant: Tenant) {
         tenantDao.deleteTenant(tenant)
     }
+
+    // Gets one tenant by id.
+    fun getTenantById(id: Int): LiveData<Tenant?> = tenantDao.getTenantById(id)
 }
