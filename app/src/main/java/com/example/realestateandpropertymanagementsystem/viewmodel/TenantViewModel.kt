@@ -36,4 +36,7 @@ class TenantViewModel(application: Application) : AndroidViewModel(application) 
     fun delete(tenant: Tenant) = viewModelScope.launch {
         repository.deleteTenant(tenant)
     }
+
+    // Lets the UI observe a single tenant.
+    fun getTenantById(id: Int): LiveData<Tenant?> = repository.getTenantById(id)
 }

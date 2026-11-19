@@ -37,6 +37,11 @@
     <string name="error_dates_missing">Select both lease dates</string>
     <string name="error_dates_order">Lease end must be after lease start</string>
 
+    <string name="edit_tenant">Edit tenant</string>
+    <string name="save_changes">Save changes</string>
+    <string name="tenant_updated">%1$s updated</string>
+
+
     <string name="error_name_required">Enter the tenant name</string>
     <string name="error_unit_required">Enter the unit number</string>
     <string name="error_unit_taken">This unit already has an active tenant</string>
@@ -50,6 +55,7 @@
     <string name="error_lease_start_required">Pick the lease start date</string>
     <string name="error_lease_end_required">Pick the lease end date</string>
     <string name="error_lease_end_before_start">Lease end must be after the start date</string>
+
 
 </resources>
 
