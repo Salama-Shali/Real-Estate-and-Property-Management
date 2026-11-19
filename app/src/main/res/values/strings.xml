@@ -14,6 +14,7 @@
     <string name="status_moved_out">Moved out</string>
     <string name="delete_tenant">Delete tenant</string>
 
+
     <string name="add_tenant">Add tenant</string>
     <string name="hint_name">Full name</string>
     <string name="hint_unit">Unit (e.g. A1)</string>
@@ -35,9 +36,26 @@
     <string name="error_due_day">Enter a day between 1 and 31</string>
     <string name="error_dates_missing">Select both lease dates</string>
     <string name="error_dates_order">Lease end must be after lease start</string>
+
     <string name="edit_tenant">Edit tenant</string>
     <string name="save_changes">Save changes</string>
     <string name="tenant_updated">%1$s updated</string>
+
+
+    <string name="error_name_required">Enter the tenant name</string>
+    <string name="error_unit_required">Enter the unit number</string>
+    <string name="error_unit_taken">This unit already has an active tenant</string>
+    <string name="error_rent_required">Enter the monthly rent</string>
+    <string name="error_rent_invalid">Rent must be a number greater than 0</string>
+    <string name="error_phone_required">Enter a phone number</string>
+    <string name="error_phone_invalid">Use a valid Kenyan number, e.g. 0712345678 or +254712345678</string>
+    <string name="error_email_invalid">Enter a valid email address</string>
+    <string name="error_due_day_required">Enter the rent due day</string>
+    <string name="error_due_day_invalid">Due day must be between 1 and 28</string>
+    <string name="error_lease_start_required">Pick the lease start date</string>
+    <string name="error_lease_end_required">Pick the lease end date</string>
+    <string name="error_lease_end_before_start">Lease end must be after the start date</string>
+
 
 </resources>
 
