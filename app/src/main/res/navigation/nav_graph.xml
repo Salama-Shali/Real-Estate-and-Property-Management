@@ -8,6 +8,14 @@
     <fragment
         android:id="@+id/tenantListFragment"
         android:name="com.example.realestateandpropertymanagementsystem.ui.TenantListFragment"
-        android:label="@string/tenants_title" />
+        android:label="@string/tenants_title">
+        <action
+            android:id="@+id/action_tenantListFragment_to_addTenantFragment"
+            app:destination="@id/addTenantFragment" />
+    </fragment>
 
+    <fragment
+        android:id="@+id/addTenantFragment"
+        android:name="com.example.realestateandpropertymanagementsystem.ui.AddTenantFragment"
+        android:label="@string/add_tenant" />
 </navigation>
