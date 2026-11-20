@@ -62,6 +62,15 @@ class AddTenantFragment : Fragment() {
                 showEndDate(millis)
             }
         }
+        // Month-to-month: ticking the box clears the end date and disables its button.
+        binding.cbNoEndDate.setOnCheckedChangeListener { _, isChecked ->
+            binding.btnEndDate.isEnabled = !isChecked
+            if (isChecked) {
+                leaseEnd = null
+                binding.btnEndDate.text = getString(R.string.select_end_date)
+                binding.tvDateError.visibility = View.GONE
+            }
+        }
         binding.btnSave.setOnClickListener { saveTenant() }
 
         // Edit mode: load the tenant and prefill the form (only once).
@@ -89,7 +98,13 @@ class AddTenantFragment : Fragment() {
         leaseStart = tenant.leaseStartDate
         leaseEnd = tenant.leaseEndDate
         showStartDate(tenant.leaseStartDate)
-        showEndDate(tenant.leaseEndDate)
+        val savedEnd = tenant.leaseEndDate
+        if (savedEnd != null) {
+            showEndDate(savedEnd)
+        } else {
+            // No end date saved = month-to-month. Ticking the box also disables the end-date button.
+            binding.cbNoEndDate.isChecked = true
+        }
     }
 
     private fun showStartDate(millis: Long) {
@@ -129,8 +144,9 @@ class AddTenantFragment : Fragment() {
         val emailError = TenantValidator.validateEmail(email)
         val dueDayError = TenantValidator.validateDueDay(dueDayText)
         // Dates: report a missing start first, otherwise check the end.
+        val hasFixedEnd = !binding.cbNoEndDate.isChecked
         val dateError = TenantValidator.validateLeaseStart(start)
-            ?: TenantValidator.validateLeaseEnd(start, end)
+            ?: TenantValidator.validateLeaseEnd(start, end, hasFixedEnd)
 
         // Show each message under its field (null clears any old message).
         setError(binding.tilName, nameError)
@@ -155,7 +171,7 @@ class AddTenantFragment : Fragment() {
         val rent = rentText.trim().toInt()
         val dueDay = dueDayText.trim().toInt()
         val startMillis = start ?: return
-        val endMillis = end ?: return
+
 
         // Duplicate check needs the database, which takes time, so it runs in a coroutine.
         // viewLifecycleOwner.lifecycleScope is cancelled automatically if the screen closes.
@@ -166,14 +182,14 @@ class AddTenantFragment : Fragment() {
                 setError(binding.tilUnit, R.string.error_unit_taken)
                 return@launch
             }
-            persistTenant(name, unit, rent, phone, email, dueDay, startMillis, endMillis)
+            persistTenant(name, unit, rent, phone, email, dueDay, startMillis,if (hasFixedEnd) end else null)
         }
     }
 
     // Writes the tenant to the database (insert or update) and returns to the list.
     private fun persistTenant(
         name: String, unit: String, rent: Int, phone: String, email: String,
-        dueDay: Int, start: Long, end: Long
+        dueDay: Int, start: Long, end: Long?
     ) {
         if (tenantId != -1) {
             // Edit mode: wait until the saved tenant has loaded.
