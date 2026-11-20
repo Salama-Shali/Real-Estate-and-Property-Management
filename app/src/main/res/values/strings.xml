@@ -56,7 +56,12 @@
     <string name="error_lease_end_required">Pick the lease end date</string>
     <string name="error_lease_end_before_start">Lease end must be after the start date</string>
     <string name="no_end_date">Month-to-month (no fixed end date)</string>
-
+    <!-- Rent reminder notification and button -->
+    <string name="reminder_channel_name">Rent reminders</string>
+    <string name="reminder_title">Rent due soon</string>
+    <string name="reminder_text">%1$d tenant(s) have rent due within %2$d days</string>
+    <string name="check_reminders">Check reminders</string>
+    <string name="reminder_check_started">Checking rent reminders…</string>
 </resources>
 
     <!-- Text shown on each tenant row. %1$s / %1$d are placeholders filled in by code -->
