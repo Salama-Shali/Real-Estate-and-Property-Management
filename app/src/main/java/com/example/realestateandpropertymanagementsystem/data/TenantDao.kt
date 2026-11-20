@@ -37,4 +37,9 @@ interface TenantDao {
     //   (When adding a new tenant we pass 0, and no real tenant has id 0.)
     @Query("SELECT COUNT(*) FROM tenants WHERE unit = :unit COLLATE NOCASE AND isActive = 1 AND id != :excludeId")
     suspend fun countActiveTenantsInUnit(unit: String, excludeId: Int): Int
+
+    // One-time read of all ACTIVE tenants (not LiveData).
+    // Used by the background reminder worker, which just needs the list once and then finishes.
+    @Query("SELECT * FROM tenants WHERE isActive = 1 ORDER BY rentDueDay ASC")
+    suspend fun getActiveTenants(): List<Tenant>
 }
