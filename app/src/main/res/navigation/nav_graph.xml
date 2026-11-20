@@ -17,9 +17,10 @@
     <fragment
         android:id="@+id/addTenantFragment"
         android:name="com.example.realestateandpropertymanagementsystem.ui.AddTenantFragment"
-        android:label="@string/add_tenant" />
+        android:label="@string/add_tenant">
     <argument
         android:name="tenantId"
         android:defaultValue="-1"
         app:argType="integer" />
+    </fragment>
 </navigation>

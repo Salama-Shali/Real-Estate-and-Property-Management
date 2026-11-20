@@ -1,7 +1,11 @@
 package com.example.realestateandpropertymanagementsystem.ui
 
 import android.os.Bundle
-import android.util.Patterns
+import androidx.annotation.StringRes
+import androidx.lifecycle.lifecycleScope
+import com.example.realestateandpropertymanagementsystem.util.TenantValidator
+import com.google.android.material.textfield.TextInputLayout
+import kotlinx.coroutines.launch
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -104,61 +108,81 @@ class AddTenantFragment : Fragment() {
         picker.show(childFragmentManager, title)
     }
 
+    // Called when "Save" is tapped: validate -> check duplicate unit -> save.
     private fun saveTenant() {
+        // Read what the user typed.
         val name = binding.etName.text.toString().trim()
         val unit = binding.etUnit.text.toString().trim()
-        val rent = binding.etRent.text.toString().trim().toIntOrNull()
+        val rentText = binding.etRent.text.toString()
         val phone = binding.etPhone.text.toString().trim()
         val email = binding.etEmail.text.toString().trim()
-        val dueDay = binding.etDueDay.text.toString().trim().toIntOrNull()
+        val dueDayText = binding.etDueDay.text.toString()
         val start = leaseStart
         val end = leaseEnd
 
-        binding.tilName.error = null
-        binding.tilUnit.error = null
-        binding.tilRent.error = null
-        binding.tilPhone.error = null
-        binding.tilEmail.error = null
-        binding.tilDueDay.error = null
-        binding.tvDateError.visibility = View.GONE
+        // Run EVERY rule. Each returns null (valid) or the id of an error message.
+        // All rules in one place: util/TenantValidator.kt
+        val nameError = TenantValidator.validateName(name)
+        val unitError = TenantValidator.validateUnit(unit)
+        val rentError = TenantValidator.validateRent(rentText)
+        val phoneError = TenantValidator.validatePhone(phone)
+        val emailError = TenantValidator.validateEmail(email)
+        val dueDayError = TenantValidator.validateDueDay(dueDayText)
+        // Dates: report a missing start first, otherwise check the end.
+        val dateError = TenantValidator.validateLeaseStart(start)
+            ?: TenantValidator.validateLeaseEnd(start, end)
 
-        var valid = true
-
-        if (name.isEmpty()) {
-            binding.tilName.error = getString(R.string.error_name); valid = false
-        }
-        if (unit.isEmpty()) {
-            binding.tilUnit.error = getString(R.string.error_unit); valid = false
-        }
-        if (rent == null || rent <= 0) {
-            binding.tilRent.error = getString(R.string.error_rent); valid = false
-        }
-        if (!phone.matches(Regex("^(\\+254|0)[17]\\d{8}$"))) {
-            binding.tilPhone.error = getString(R.string.error_phone); valid = false
-        }
-        if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            binding.tilEmail.error = getString(R.string.error_email); valid = false
-        }
-        if (dueDay == null || dueDay !in 1..31) {
-            binding.tilDueDay.error = getString(R.string.error_due_day); valid = false
-        }
-        if (start == null || end == null) {
-            showDateError(getString(R.string.error_dates_missing)); valid = false
-        } else if (end <= start) {
-            showDateError(getString(R.string.error_dates_order)); valid = false
+        // Show each message under its field (null clears any old message).
+        setError(binding.tilName, nameError)
+        setError(binding.tilUnit, unitError)
+        setError(binding.tilRent, rentError)
+        setError(binding.tilPhone, phoneError)
+        setError(binding.tilEmail, emailError)
+        setError(binding.tilDueDay, dueDayError)
+        if (dateError != null) {
+            showDateError(getString(dateError))
+        } else {
+            binding.tvDateError.visibility = View.GONE
         }
 
-        if (!valid) return
+        // Stop here if anything is invalid.
+        val hasErrors = listOf(
+            nameError, unitError, rentError, phoneError, emailError, dueDayError, dateError
+        ).any { it != null }
+        if (hasErrors) return
 
-        val current = existingTenant
+        // Everything is valid, so the conversions below are safe.
+        val rent = rentText.trim().toInt()
+        val dueDay = dueDayText.trim().toInt()
+        val startMillis = start ?: return
+        val endMillis = end ?: return
+
+        // Duplicate check needs the database, which takes time, so it runs in a coroutine.
+        // viewLifecycleOwner.lifecycleScope is cancelled automatically if the screen closes.
+        viewLifecycleOwner.lifecycleScope.launch {
+            // When editing, exclude this tenant so they don't clash with themselves.
+            val excludeId = if (tenantId != -1) tenantId else 0
+            if (viewModel.isUnitOccupied(unit, excludeId)) {
+                setError(binding.tilUnit, R.string.error_unit_taken)
+                return@launch
+            }
+            persistTenant(name, unit, rent, phone, email, dueDay, startMillis, endMillis)
+        }
+    }
+
+    // Writes the tenant to the database (insert or update) and returns to the list.
+    private fun persistTenant(
+        name: String, unit: String, rent: Int, phone: String, email: String,
+        dueDay: Int, start: Long, end: Long
+    ) {
         if (tenantId != -1) {
             // Edit mode: wait until the saved tenant has loaded.
-            if (current == null) return
+            val current = existingTenant ?: return
             // copy() keeps the id and isActive, and changes only the fields we pass.
             viewModel.update(
                 current.copy(
-                    name = name, unit = unit, rent = rent!!, phone = phone, email = email,
-                    rentDueDay = dueDay!!, leaseStartDate = start!!, leaseEndDate = end!!
+                    name = name, unit = unit, rent = rent, phone = phone, email = email,
+                    rentDueDay = dueDay, leaseStartDate = start, leaseEndDate = end
                 )
             )
             Toast.makeText(requireContext(), getString(R.string.tenant_updated, name), Toast.LENGTH_SHORT).show()
@@ -166,13 +190,18 @@ class AddTenantFragment : Fragment() {
             // Add mode: insert a brand new tenant.
             viewModel.insert(
                 Tenant(
-                    name = name, unit = unit, rent = rent!!, phone = phone, email = email,
-                    rentDueDay = dueDay!!, leaseStartDate = start!!, leaseEndDate = end!!
+                    name = name, unit = unit, rent = rent, phone = phone, email = email,
+                    rentDueDay = dueDay, leaseStartDate = start, leaseEndDate = end
                 )
             )
             Toast.makeText(requireContext(), getString(R.string.tenant_saved, name), Toast.LENGTH_SHORT).show()
         }
         findNavController().popBackStack()
+    }
+
+    // Shows (or clears, when messageId is null) the error under one form field.
+    private fun setError(layout: TextInputLayout, @StringRes messageId: Int?) {
+        layout.error = messageId?.let { getString(it) }
     }
 
     private fun showDateError(message: String) {
