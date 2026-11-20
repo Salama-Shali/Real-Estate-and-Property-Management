@@ -13,6 +13,8 @@ import com.example.realestateandpropertymanagementsystem.databinding.FragmentTen
 import com.example.realestateandpropertymanagementsystem.viewmodel.TenantViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
+import androidx.navigation.fragment.findNavController
+import androidx.core.os.bundleOf
 
 // It only displays data and reacts to the users taps
 class TenantListFragment : Fragment() {
@@ -41,7 +43,12 @@ class TenantListFragment : Fragment() {
 
         // Create the adapter and say what happens when a row or delete icon is tapped
         adapter = TenantAdapter(
-            onTenantClick = { },
+            onTenantClick = { tenant ->
+                // Open the form and tell it which tenant was tapped
+                findNavController().navigate(
+                    R.id.action_tenantListFragment_to_addTenantFragment,
+                    bundleOf("tenantId" to tenant.id)
+                )},
             onDeleteClick = { tenant -> confirmDelete(tenant) }
         )
 
@@ -54,6 +61,10 @@ class TenantListFragment : Fragment() {
             adapter.submitList(tenants)
             //show the message only when there is nothing to list
             binding.tvEmpty.visibility = if (tenants.isEmpty()) View.VISIBLE else View.GONE
+        }
+        // Open the Add Tenant form when the + button is tapped
+        binding.fabAdd.setOnClickListener {
+            findNavController().navigate(R.id.action_tenantListFragment_to_addTenantFragment)
         }
     }
 

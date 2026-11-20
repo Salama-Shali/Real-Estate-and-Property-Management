@@ -31,7 +31,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         tools:listitem="@layout/item_tenant" />
 
-    <!-- Empty state: hidden by default, shown by the Fragment when the list is empty -->
     <TextView
         android:id="@+id/tvEmpty"
         android:layout_width="0dp"
@@ -43,6 +42,17 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- Round "+" button that opens the Add Tenant form -->
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabAdd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="24dp"
+        android:contentDescription="@string/add_tenant"
+        android:src="@android:drawable/ic_input_add"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

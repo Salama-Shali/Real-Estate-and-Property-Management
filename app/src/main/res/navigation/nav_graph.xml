@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-    <!-- map of all screens and how they connect -->
+<!-- map of all screens and how they connect -->
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/nav_graph"
@@ -8,6 +8,18 @@
     <fragment
         android:id="@+id/tenantListFragment"
         android:name="com.example.realestateandpropertymanagementsystem.ui.TenantListFragment"
-        android:label="Tenants" />
+        android:label="@string/tenants_title">
+        <action
+            android:id="@+id/action_tenantListFragment_to_addTenantFragment"
+            app:destination="@id/addTenantFragment" />
+    </fragment>
 
+    <fragment
+        android:id="@+id/addTenantFragment"
+        android:name="com.example.realestateandpropertymanagementsystem.ui.AddTenantFragment"
+        android:label="@string/add_tenant" />
+    <argument
+        android:name="tenantId"
+        android:defaultValue="-1"
+        app:argType="integer" />
 </navigation>
