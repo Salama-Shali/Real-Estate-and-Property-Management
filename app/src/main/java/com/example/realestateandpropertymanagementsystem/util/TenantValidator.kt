@@ -80,9 +80,11 @@ object TenantValidator {
     fun validateLeaseStart(start: Long?): Int? =
         if (start == null) R.string.error_lease_start_required else null
 
-    // End date must be picked and must come after the start date.
+    // End date is only required for FIXED-TERM leases. Month-to-month tenancies have none.
+    // hasFixedEnd = false means the box "Month-to-month" is ticked, so nothing to check.
     @StringRes
-    fun validateLeaseEnd(start: Long?, end: Long?): Int? = when {
+    fun validateLeaseEnd(start: Long?, end: Long?, hasFixedEnd: Boolean): Int? = when {
+        !hasFixedEnd -> null
         end == null -> R.string.error_lease_end_required
         start != null && end <= start -> R.string.error_lease_end_before_start
         else -> null

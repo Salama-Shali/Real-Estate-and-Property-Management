@@ -17,6 +17,6 @@ data class Tenant(
     val email: String,
     val rentDueDay: Int,
     val leaseStartDate: Long,
-    val leaseEndDate: Long,
+    val leaseEndDate: Long?, // null = no fixed end date (month-to-month tenancy)
     val isActive: Boolean = true // false = tenant has moved out, but we keep their record and payment history
 )
