@@ -81,11 +81,17 @@ class TenantDetailsFragment : Fragment() {
         binding.tvDueDay.text = getString(R.string.rent_due_format, tenant.rentDueDay)
         binding.tvPhone.text = getString(R.string.tenant_phone_format, tenant.phone)
         binding.tvEmail.text = getString(R.string.tenant_email_format, tenant.email)
-        binding.tvLease.text = getString(
-            R.string.lease_format,
-            dateFormat.format(Date(tenant.leaseStartDate)),
-            dateFormat.format(Date(tenant.leaseEndDate))
-        )
+        // End date is null for month-to-month tenancies.
+        val end = tenant.leaseEndDate
+        binding.tvLease.text = if (end != null) {
+            getString(
+                R.string.lease_format,
+                dateFormat.format(Date(tenant.leaseStartDate)),
+                dateFormat.format(Date(end))
+            )
+        } else {
+            getString(R.string.lease_format_open, dateFormat.format(Date(tenant.leaseStartDate)))
+        }
         binding.tvLeaseStatus.text = LeaseStatus.label(requireContext(), tenant.leaseEndDate)
         binding.tvLeaseStatus.setTextColor(LeaseStatus.color(requireContext(), tenant.leaseEndDate))
     }

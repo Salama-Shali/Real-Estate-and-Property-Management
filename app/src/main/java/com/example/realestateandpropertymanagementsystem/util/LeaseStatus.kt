@@ -28,7 +28,9 @@ object LeaseStatus {
     }
 
     // The text shown to the user, e.g. "Lease expiring soon: 12 days left".
-    fun label(context: Context, leaseEnd: Long): String {
+    // leaseEnd is null for month-to-month tenancies, which have no expiry to count down to.
+    fun label(context: Context, leaseEnd: Long?): String {
+        if (leaseEnd == null) return context.getString(R.string.no_end_date)
         val days = daysLeft(leaseEnd)
         return when {
             days < 0 -> context.getString(R.string.lease_status_expired, -days)
@@ -38,8 +40,9 @@ object LeaseStatus {
         }
     }
 
-    // Green, orange or red depending on the state.
-    fun color(context: Context, leaseEnd: Long): Int {
+    // Green, orange or red depending on the state; grey for month-to-month.
+    fun color(context: Context, leaseEnd: Long?): Int {
+        if (leaseEnd == null) return ContextCompat.getColor(context, android.R.color.darker_gray)
         val colorRes = when (stateFor(leaseEnd)) {
             LeaseState.ACTIVE -> R.color.lease_ok
             LeaseState.EXPIRING_SOON -> R.color.lease_warning

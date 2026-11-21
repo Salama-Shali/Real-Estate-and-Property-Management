@@ -74,7 +74,7 @@
     <string name="lease_status_today">Lease expires today</string>
     <string name="lease_status_expired">Lease expired %1$d days ago</string>
     <string name="no_end_date">Month-to-month (no fixed end date)</string>
-
+    <string name="lease_format_open">Lease: from %1$s (month-to-month)</string>
 </resources>
 
     <!-- Text shown on each tenant row. %1$s / %1$d are placeholders filled in by code -->
