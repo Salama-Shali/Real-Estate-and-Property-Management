@@ -7,14 +7,16 @@ import android.content.Context
 // Registers the tenant table and defines the database version.
 // Defines the Room database and provides access to the DAO.
 @Database(
-    entities = [Tenant::class],
-    version = 1,
+    entities = [Tenant::class, Payment::class],
+    version = 2,
     exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {
 
     // Provides access to the tenant database operations.
     abstract fun tenantDao(): TenantDao
+
+    abstract fun paymentDao(): PaymentDao
 
     companion object {
         // Holds the database instance so we can reuse it.
@@ -29,7 +31,9 @@ abstract class AppDatabase : RoomDatabase() {
                     context.applicationContext,
                     AppDatabase::class.java,
                     "real_estate_database"
-                ).build()
+                )
+                    .fallbackToDestructiveMigration()
+                    .build()
 
                 INSTANCE = instance
                 instance

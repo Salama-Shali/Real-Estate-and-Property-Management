@@ -45,11 +45,11 @@ class TenantListFragment : Fragment() {
         // Create the adapter and say what happens when a row or delete icon is tapped
         adapter = TenantAdapter(
             onTenantClick = { tenant ->
-                // Open the form and tell it which tenant was tapped
                 findNavController().navigate(
-                    R.id.action_tenantListFragment_to_addTenantFragment,
+                    R.id.action_tenantListFragment_to_tenantDetailsFragment,
                     bundleOf("tenantId" to tenant.id)
-                )},
+                )
+            },
             onDeleteClick = { tenant -> confirmDelete(tenant) }
         )
 
