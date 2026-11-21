@@ -15,6 +15,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import androidx.navigation.fragment.findNavController
 import androidx.core.os.bundleOf
+import com.example.realestateandpropertymanagementsystem.worker.ReminderScheduler
 
 // It only displays data and reacts to the users taps
 class TenantListFragment : Fragment() {
@@ -65,6 +66,11 @@ class TenantListFragment : Fragment() {
         // Open the Add Tenant form when the + button is tapped
         binding.fabAdd.setOnClickListener {
             findNavController().navigate(R.id.action_tenantListFragment_to_addTenantFragment)
+        }
+        // Run the reminder check right now, so the landlord doesn't wait a day.
+        binding.btnCheckReminders.setOnClickListener {
+            ReminderScheduler.checkNow(requireContext())
+            Snackbar.make(binding.root, R.string.reminder_check_started, Snackbar.LENGTH_SHORT).show()
         }
     }
 

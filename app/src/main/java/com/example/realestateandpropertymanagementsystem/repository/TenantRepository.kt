@@ -34,4 +34,7 @@ class TenantRepository(private val tenantDao: TenantDao) {
     // excludeId = the tenant being edited (0 when adding a new one).
     suspend fun isUnitOccupied(unit: String, excludeId: Int = 0): Boolean =
         tenantDao.countActiveTenantsInUnit(unit.trim(), excludeId) > 0
+
+    // One-time list of active tenants, for background work like rent reminders.
+    suspend fun getActiveTenants(): List<Tenant> = tenantDao.getActiveTenants()
 }
