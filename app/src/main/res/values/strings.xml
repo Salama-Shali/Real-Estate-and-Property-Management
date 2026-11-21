@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Real estate and Property Management System</string>
+    <string name="app_name">RentTrack</string>
     <string name="tenants_title">Tenants</string>
     <string name="no_tenants">No tenants yet.\nAdd your first tenant to get started.</string>
     <string name="delete_tenant_title">Delete tenant?</string>
