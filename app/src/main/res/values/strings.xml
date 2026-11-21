@@ -55,7 +55,26 @@
     <string name="error_lease_start_required">Pick the lease start date</string>
     <string name="error_lease_end_required">Pick the lease end date</string>
     <string name="error_lease_end_before_start">Lease end must be after the start date</string>
+    <string name="tenant_details">Tenant details</string>
+    <string name="edit">Edit</string>
+    <string name="record_payment">Record payment</string>
+    <string name="payment_history">Payment history</string>
+    <string name="no_payments">No payments recorded yet.</string>
+    <string name="hint_amount">Amount (KES)</string>
+    <string name="hint_note">Note (optional)</string>
+    <string name="error_amount">Enter an amount above 0</string>
+    <string name="payment_saved">Payment recorded</string>
+    <string name="save">Save</string>
+    <string name="payment_amount_format">KES %1$d</string>
+    <string name="tenant_email_format">Email: %1$s</string>
+    <string name="rent_due_format">Rent due on day %1$d of each month</string>
+    <string name="lease_format">Lease: %1$s to %2$s</string>
+    <string name="lease_status_active">Lease active: %1$d days left</string>
+    <string name="lease_status_expiring">Lease expiring soon: %1$d days left</string>
+    <string name="lease_status_today">Lease expires today</string>
+    <string name="lease_status_expired">Lease expired %1$d days ago</string>
     <string name="no_end_date">Month-to-month (no fixed end date)</string>
+    <string name="lease_format_open">Lease: from %1$s (month-to-month)</string>
     <!-- Rent reminder notification and button -->
     <string name="reminder_channel_name">Rent reminders</string>
     <string name="reminder_title">Rent due soon</string>

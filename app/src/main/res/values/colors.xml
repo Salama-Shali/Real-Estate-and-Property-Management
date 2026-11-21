@@ -2,4 +2,7 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="lease_ok">#2E7D32</color>
+    <color name="lease_warning">#EF6C00</color>
+    <color name="lease_expired">#C62828</color>
 </resources>
