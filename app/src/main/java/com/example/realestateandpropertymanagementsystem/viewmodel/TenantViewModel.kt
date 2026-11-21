@@ -39,4 +39,10 @@ class TenantViewModel(application: Application) : AndroidViewModel(application) 
 
     // Lets the UI observe a single tenant.
     fun getTenantById(id: Int): LiveData<Tenant?> = repository.getTenantById(id)
+
+    // Not wrapped in viewModelScope.launch like insert/update/delete:
+    // the form needs the ANSWER (true/false) before deciding whether to save,
+    // so it is a suspend function the Fragment calls inside its own coroutine.
+    suspend fun isUnitOccupied(unit: String, excludeId: Int = 0): Boolean =
+        repository.isUnitOccupied(unit, excludeId)
 }
