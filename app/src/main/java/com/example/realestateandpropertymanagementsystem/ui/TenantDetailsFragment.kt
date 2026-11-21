@@ -22,7 +22,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
-
+import com.example.realestateandpropertymanagementsystem.util.LeaseStatus
 // Shows one tenant's details and payment history.
 class TenantDetailsFragment : Fragment() {
 
@@ -86,6 +86,8 @@ class TenantDetailsFragment : Fragment() {
             dateFormat.format(Date(tenant.leaseStartDate)),
             dateFormat.format(Date(tenant.leaseEndDate))
         )
+        binding.tvLeaseStatus.text = LeaseStatus.label(requireContext(), tenant.leaseEndDate)
+        binding.tvLeaseStatus.setTextColor(LeaseStatus.color(requireContext(), tenant.leaseEndDate))
     }
 
     // Pop-up to record a payment. Stays open if the amount is invalid.

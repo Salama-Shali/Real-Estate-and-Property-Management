@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.realestateandpropertymanagementsystem.R
 import com.example.realestateandpropertymanagementsystem.data.Tenant
 import com.example.realestateandpropertymanagementsystem.databinding.ItemTenantBinding
-
+import com.example.realestateandpropertymanagementsystem.util.LeaseStatus
 class TenantAdapter(
     private val onTenantClick: (Tenant) -> Unit,
     private val onDeleteClick: (Tenant) -> Unit
@@ -34,7 +34,9 @@ class TenantAdapter(
             binding.tvStatus.text = context.getString(
                 if (tenant.isActive) R.string.status_active else R.string.status_moved_out
             )
-
+            // Lease status: text and colour depend on the lease end date.
+            binding.tvLease.text = LeaseStatus.label(context, tenant.leaseEndDate)
+            binding.tvLease.setTextColor(LeaseStatus.color(context, tenant.leaseEndDate))
             // Tell the Fragment which tenant was tapped.
             binding.root.setOnClickListener { onTenantClick(tenant) }
             binding.btnDelete.setOnClickListener { onDeleteClick(tenant) }
