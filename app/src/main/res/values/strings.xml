@@ -90,6 +90,7 @@
     <string name="dashboard_due_soon">Rent due in the next 3 days</string>
     <string name="dashboard_empty">No tenants yet. Tap Add tenant to get started.</string>
     <string name="view_tenants">View tenants</string>
+    <string name="dashboard_welcome">Welcome back</string>
 </resources>
 
     <!-- Text shown on each tenant row. %1$s / %1$d are placeholders filled in by code -->
