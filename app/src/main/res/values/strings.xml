@@ -69,6 +69,10 @@
     <string name="tenant_email_format">Email: %1$s</string>
     <string name="rent_due_format">Rent due on day %1$d of each month</string>
     <string name="lease_format">Lease: %1$s to %2$s</string>
+    <string name="lease_status_active">Lease active: %1$d days left</string>
+    <string name="lease_status_expiring">Lease expiring soon: %1$d days left</string>
+    <string name="lease_status_today">Lease expires today</string>
+    <string name="lease_status_expired">Lease expired %1$d days ago</string>
 
 </resources>
 
