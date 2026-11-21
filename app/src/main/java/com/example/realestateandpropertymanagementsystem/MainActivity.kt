@@ -10,9 +10,15 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.navigation.NavController
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.setupActionBarWithNavController
 import com.example.realestateandpropertymanagementsystem.worker.ReminderScheduler
 
 class MainActivity : AppCompatActivity() {
+
+    // Controls moving between screens; the toolbar's Up arrow uses it.
+    private lateinit var navController: NavController
 
     // Handles the system's "Allow notifications?" dialog. We don't need to react to the
     // answer: if denied, the worker simply shows no notification.
@@ -29,10 +35,24 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
+        // Use our MaterialToolbar as the screen's action bar.
+        setSupportActionBar(findViewById(R.id.toolbar))
+
+        // Link the toolbar to navigation: it shows each screen's title and an Up arrow
+        // on every screen except the start (Dashboard).
+        val navHostFragment =
+            supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+        navController = navHostFragment.navController
+        setupActionBarWithNavController(navController)
+
         askForNotificationPermission()
         // Schedule the daily background reminder (does nothing if already scheduled).
         ReminderScheduler.schedule(this)
     }
+
+    // Called when the Up arrow is tapped: go back one screen.
+    override fun onSupportNavigateUp(): Boolean =
+        navController.navigateUp() || super.onSupportNavigateUp()
 
     // Android 13+ (API 33) requires the user's permission before showing notifications.
     private fun askForNotificationPermission() {
