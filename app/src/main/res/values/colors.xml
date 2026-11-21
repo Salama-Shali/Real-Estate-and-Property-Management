@@ -5,4 +5,40 @@
     <color name="lease_ok">#2E7D32</color>
     <color name="lease_warning">#EF6C00</color>
     <color name="lease_expired">#C62828</color>
+    <!-- RentTrack palette: light theme (navy + sky blue) -->
+    <color name="brand_primary">#0A2A43</color>
+    <color name="brand_on_primary">#FFFFFF</color>
+    <color name="brand_primary_container">#BFD8E7</color>
+    <color name="brand_on_primary_container">#06223A</color>
+    <color name="brand_secondary">#1BC6B4</color>
+    <color name="brand_on_secondary">#00201C</color>
+    <color name="brand_secondary_container">#BDF2EC</color>
+    <color name="brand_on_secondary_container">#00201C</color>
+    <color name="brand_surface">#FFFFFF</color>
+    <color name="brand_on_surface">#1A1C1E</color>
+    <color name="brand_surface_variant">#DDE3EA</color>
+    <color name="brand_outline">#72787E</color>
+
+    <!-- RentTrack palette: dark theme -->
+    <color name="brand_primary_dark">#A7D3F2</color>
+    <color name="brand_on_primary_dark">#0A2A43</color>
+    <color name="brand_primary_container_dark">#1B4263</color>
+    <color name="brand_on_primary_container_dark">#D2E8FA</color>
+    <color name="brand_secondary_dark">#53DDCC</color>
+    <color name="brand_on_secondary_dark">#00201C</color>
+    <color name="brand_secondary_container_dark">#004F48</color>
+    <color name="brand_on_secondary_container_dark">#BDF2EC</color>
+    <color name="brand_surface_dark">#161C24</color>
+    <color name="brand_on_surface_dark">#E0E3E8</color>
+    <color name="brand_surface_variant_dark">#40484F</color>
+    <color name="brand_outline_dark">#8A9299</color>
+
+    <!-- Toolbar stays navy in BOTH light and dark mode, so the white title and
+         status-bar icons are always readable -->
+    <color name="brand_toolbar">#0A2A43</color>
+    <!-- Screen background: soft blue-grey, so white cards stand out on it -->
+    <color name="brand_background">#E8EEF6</color>
+    <color name="brand_background_dark">#0D1218</color>
+    <!-- End colour of the dashboard header gradient (it starts at brand_toolbar navy) -->
+    <color name="brand_header_end">#3F7FB5</color>
 </resources>

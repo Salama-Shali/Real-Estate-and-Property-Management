@@ -14,7 +14,9 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupActionBarWithNavController
 import com.example.realestateandpropertymanagementsystem.worker.ReminderScheduler
-
+import android.graphics.Color
+import android.view.View
+import androidx.activity.SystemBarStyle
 class MainActivity : AppCompatActivity() {
 
     // Controls moving between screens; the toolbar's Up arrow uses it.
@@ -27,11 +29,15 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
+        // White status-bar icons, because the toolbar behind them is dark teal.
+        enableEdgeToEdge(statusBarStyle = SystemBarStyle.dark(Color.TRANSPARENT))
         setContentView(R.layout.activity_main)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+            // The status-bar space sits behind the coloured toolbar; the navigation-bar
+            // space goes under the screen content instead.
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, 0)
+            findViewById<View>(R.id.nav_host_fragment).setPadding(0, 0, 0, systemBars.bottom)
             insets
         }
 

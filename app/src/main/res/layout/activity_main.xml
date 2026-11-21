@@ -1,26 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- activity_main.xml: a toolbar on top (title + Up arrow) and, below it,
-     the container where the NavHostFragment swaps screens in and out. -->
+<!-- activity_main.xml: a colored toolbar on top (title + Up arrow) and, below it,
+     the container where the NavHostFragment swaps screens in and out.
+     The root is colored too, so the status bar area looks like part of the toolbar. -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/brand_toolbar"
     android:orientation="vertical">
 
-    <!-- The title shows each screen's label from nav_graph.xml;
-         the Up arrow appears automatically on every screen except the Dashboard. -->
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize" />
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/brand_toolbar"
+        app:navigationIconTint="@color/white"
+        app:titleTextColor="@color/white" />
 
+    <!-- Screens sit on the normal surface colour -->
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/nav_host_fragment"
         android:name="androidx.navigation.fragment.NavHostFragment"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
+        android:background="?android:attr/colorBackground"
         app:defaultNavHost="true"
         app:navGraph="@navigation/nav_graph" />
 
