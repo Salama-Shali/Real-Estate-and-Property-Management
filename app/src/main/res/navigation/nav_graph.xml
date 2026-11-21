@@ -1,9 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- map of all screens and how they connect -->
+<!-- map of all screens and how they connect. The Dashboard is the home screen. -->
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/tenantListFragment">
+    app:startDestination="@id/dashboardFragment">
+
+    <fragment
+        android:id="@+id/dashboardFragment"
+        android:name="com.example.realestateandpropertymanagementsystem.ui.DashboardFragment"
+        android:label="@string/dashboard_title">
+        <action
+            android:id="@+id/action_dashboardFragment_to_tenantListFragment"
+            app:destination="@id/tenantListFragment" />
+        <action
+            android:id="@+id/action_dashboardFragment_to_addTenantFragment"
+            app:destination="@id/addTenantFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/tenantListFragment"
