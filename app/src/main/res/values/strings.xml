@@ -55,7 +55,20 @@
     <string name="error_lease_start_required">Pick the lease start date</string>
     <string name="error_lease_end_required">Pick the lease end date</string>
     <string name="error_lease_end_before_start">Lease end must be after the start date</string>
-
+    <string name="tenant_details">Tenant details</string>
+    <string name="edit">Edit</string>
+    <string name="record_payment">Record payment</string>
+    <string name="payment_history">Payment history</string>
+    <string name="no_payments">No payments recorded yet.</string>
+    <string name="hint_amount">Amount (KES)</string>
+    <string name="hint_note">Note (optional)</string>
+    <string name="error_amount">Enter an amount above 0</string>
+    <string name="payment_saved">Payment recorded</string>
+    <string name="save">Save</string>
+    <string name="payment_amount_format">KES %1$d</string>
+    <string name="tenant_email_format">Email: %1$s</string>
+    <string name="rent_due_format">Rent due on day %1$d of each month</string>
+    <string name="lease_format">Lease: %1$s to %2$s</string>
 
 </resources>
 

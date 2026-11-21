@@ -12,14 +12,31 @@
         <action
             android:id="@+id/action_tenantListFragment_to_addTenantFragment"
             app:destination="@id/addTenantFragment" />
+        <action
+            android:id="@+id/action_tenantListFragment_to_tenantDetailsFragment"
+            app:destination="@id/tenantDetailsFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/tenantDetailsFragment"
+        android:name="com.example.realestateandpropertymanagementsystem.ui.TenantDetailsFragment"
+        android:label="@string/tenant_details">
+        <argument
+            android:name="tenantId"
+            android:defaultValue="-1"
+            app:argType="integer" />
+        <action
+            android:id="@+id/action_tenantDetailsFragment_to_addTenantFragment"
+            app:destination="@id/addTenantFragment" />
     </fragment>
 
     <fragment
         android:id="@+id/addTenantFragment"
         android:name="com.example.realestateandpropertymanagementsystem.ui.AddTenantFragment"
-        android:label="@string/add_tenant" />
-    <argument
-        android:name="tenantId"
-        android:defaultValue="-1"
-        app:argType="integer" />
+        android:label="@string/add_tenant">
+        <argument
+            android:name="tenantId"
+            android:defaultValue="-1"
+            app:argType="integer" />
+    </fragment>
 </navigation>
