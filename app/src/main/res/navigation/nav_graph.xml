@@ -8,7 +8,7 @@
     <fragment
         android:id="@+id/dashboardFragment"
         android:name="com.example.realestateandpropertymanagementsystem.ui.DashboardFragment"
-        android:label="@string/dashboard_title">
+        android:label="@string/app_name">
         <action
             android:id="@+id/action_dashboardFragment_to_tenantListFragment"
             app:destination="@id/tenantListFragment" />

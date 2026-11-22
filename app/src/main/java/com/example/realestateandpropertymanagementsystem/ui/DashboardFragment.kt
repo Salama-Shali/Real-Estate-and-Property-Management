@@ -39,6 +39,7 @@ class DashboardFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        showGreeting()
 
         // Navigation: each button moves to another screen defined in nav_graph.xml.
         binding.btnViewTenants.setOnClickListener {
@@ -53,6 +54,16 @@ class DashboardFragment : Fragment() {
         viewModel.allTenants.observe(viewLifecycleOwner) { tenants ->
             showStats(tenants)
         }
+    }
+    // Sets the greeting from the phone's clock
+    private fun showGreeting() {
+        val hour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY)
+        val greetingRes = when (hour) {
+            in 0..11 -> R.string.greeting_morning
+            in 12..16 -> R.string.greeting_afternoon
+            else -> R.string.greeting_evening
+        }
+        binding.tvGreeting.text = getString(greetingRes)
     }
 
     private fun showStats(tenants: List<Tenant>) {
