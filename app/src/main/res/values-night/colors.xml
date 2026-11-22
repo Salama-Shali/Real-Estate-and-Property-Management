@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Lighter lease-status colours for dark mode: the light-mode ones are too dark to read on dark cards. -->
+<resources>
+    <color name="lease_ok">#81C784</color>
+    <color name="lease_warning">#FFB74D</color>
+    <color name="lease_expired">#EF9A9A</color>
+</resources>
