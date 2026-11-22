@@ -91,6 +91,9 @@
     <string name="dashboard_empty">No tenants yet. Tap Add tenant to get started.</string>
     <string name="view_tenants">View tenants</string>
     <string name="dashboard_welcome">Welcome back</string>
+    <string name="greeting_morning">Good morning</string>
+    <string name="greeting_afternoon">Good afternoon</string>
+    <string name="greeting_evening">Good evening</string>
 </resources>
 
     <!-- Text shown on each tenant row. %1$s / %1$d are placeholders filled in by code -->
