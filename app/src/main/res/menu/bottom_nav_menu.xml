@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- The two items of the bottom bar. Each item's id MUST match the id of a screen in
+     nav_graph.xml; that's how the bar knows where to navigate. -->
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/dashboardFragment"
+        android:icon="@drawable/ic_home"
+        android:title="@string/dashboard_title" />
+    <item
+        android:id="@+id/tenantListFragment"
+        android:icon="@drawable/ic_people"
+        android:title="@string/tenants_title" />
+</menu>
