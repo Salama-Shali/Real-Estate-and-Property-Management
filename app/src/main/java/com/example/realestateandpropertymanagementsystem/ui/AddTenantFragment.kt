@@ -21,6 +21,7 @@ import com.google.android.material.datepicker.MaterialDatePicker
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import com.google.android.material.snackbar.Snackbar
 
 // One form for two jobs: add a new tenant, or edit an existing one.
 class AddTenantFragment : Fragment() {
@@ -187,35 +188,48 @@ class AddTenantFragment : Fragment() {
     }
 
     // Writes the tenant to the database (insert or update) and returns to the list.
-    private fun persistTenant(
+    // Writes the tenant to the database (insert or update). If the write fails,
+    // the user sees an error message and stays on the form to try again.
+    private suspend fun persistTenant(
         name: String, unit: String, rent: Int, phone: String, email: String,
         dueDay: Int, start: Long, end: Long?
     ) {
+        val saved: Boolean
+        val messageRes: Int
         if (tenantId != -1) {
             // Edit mode: wait until the saved tenant has loaded.
             val current = existingTenant ?: return
             // copy() keeps the id and isActive, and changes only the fields we pass.
-            viewModel.update(
+            saved = viewModel.updateSafely(
                 current.copy(
                     name = name, unit = unit, rent = rent, phone = phone, email = email,
                     rentDueDay = dueDay, leaseStartDate = start, leaseEndDate = end
                 )
             )
-            Toast.makeText(requireContext(), getString(R.string.tenant_updated, name), Toast.LENGTH_SHORT).show()
+            messageRes = R.string.tenant_updated
         } else {
             // Add mode: insert a brand new tenant.
-            viewModel.insert(
+            saved = viewModel.insertSafely(
                 Tenant(
                     name = name, unit = unit, rent = rent, phone = phone, email = email,
                     rentDueDay = dueDay, leaseStartDate = start, leaseEndDate = end
                 )
             )
-            Toast.makeText(requireContext(), getString(R.string.tenant_saved, name), Toast.LENGTH_SHORT).show()
+            messageRes = R.string.tenant_saved
         }
-        findNavController().popBackStack()
+
+        // The user may have left the screen while we waited; then there is nothing to update.
+        if (_binding == null) return
+
+        if (saved) {
+            Toast.makeText(requireContext(), getString(messageRes, name), Toast.LENGTH_SHORT).show()
+            findNavController().popBackStack()
+        } else {
+            // Error state: stay on the form so the user keeps what they typed.
+            Snackbar.make(binding.root, R.string.error_save_failed, Snackbar.LENGTH_LONG).show()
+        }
     }
 
-    // Shows (or clears, when messageId is null) the error under one form field.
     private fun setError(layout: TextInputLayout, @StringRes messageId: Int?) {
         layout.error = messageId?.let { getString(it) }
     }

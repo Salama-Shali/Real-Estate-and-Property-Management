@@ -16,6 +16,8 @@ import com.google.android.material.snackbar.Snackbar
 import androidx.navigation.fragment.findNavController
 import androidx.core.os.bundleOf
 import com.example.realestateandpropertymanagementsystem.worker.ReminderScheduler
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.launch
 
 // It only displays data and reacts to the users taps
 class TenantListFragment : Fragment() {
@@ -74,19 +76,25 @@ class TenantListFragment : Fragment() {
         }
     }
 
-    // Ask before deleting a tenant since deletion cant be undone
+
+    // Ask before deleting: a delete cannot be undone, so we confirm first.
     private fun confirmDelete(tenant: Tenant) {
         MaterialAlertDialogBuilder(requireContext())
             .setTitle(R.string.delete_tenant_title)
             .setMessage(getString(R.string.delete_tenant_message, tenant.name))
             .setPositiveButton(R.string.delete) { _, _ ->
-                viewModel.delete(tenant)
-                // Feedback message so the user knows it worked.
-                Snackbar.make(
-                    binding.root,
-                    getString(R.string.tenant_deleted, tenant.name),
-                    Snackbar.LENGTH_SHORT
-                ).show()
+                viewLifecycleOwner.lifecycleScope.launch {
+                    val deleted = viewModel.deleteSafely(tenant)
+                    // The user may have left the screen while we waited.
+                    if (_binding == null) return@launch
+                    // Feedback: success message, or an error message if it failed.
+                    val message = if (deleted) {
+                        getString(R.string.tenant_deleted, tenant.name)
+                    } else {
+                        getString(R.string.error_delete_failed)
+                    }
+                    Snackbar.make(binding.root, message, Snackbar.LENGTH_SHORT).show()
+                }
             }
             .setNegativeButton(R.string.cancel, null) // just close the dialog
             .show()

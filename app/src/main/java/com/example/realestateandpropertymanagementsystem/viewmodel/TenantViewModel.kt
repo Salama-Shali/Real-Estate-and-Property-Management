@@ -8,6 +8,7 @@ import com.example.realestateandpropertymanagementsystem.data.AppDatabase
 import com.example.realestateandpropertymanagementsystem.data.Tenant
 import com.example.realestateandpropertymanagementsystem.repository.TenantRepository
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.CancellationException
 
 
 class TenantViewModel(application: Application) : AndroidViewModel(application) {
@@ -45,4 +46,22 @@ class TenantViewModel(application: Application) : AndroidViewModel(application) 
     // so it is a suspend function the Fragment calls inside its own coroutine.
     suspend fun isUnitOccupied(unit: String, excludeId: Int = 0): Boolean =
         repository.isUnitOccupied(unit, excludeId)
+
+    // Each returns true if the database write worked and false if it failed,
+    // so the screen can show an error message instead of crashing, or pretending
+    // that everything was saved.
+    suspend fun insertSafely(tenant: Tenant): Boolean = attempt { repository.insertTenant(tenant) }
+    suspend fun updateSafely(tenant: Tenant): Boolean = attempt { repository.updateTenant(tenant) }
+    suspend fun deleteSafely(tenant: Tenant): Boolean = attempt { repository.deleteTenant(tenant) }
+
+    // Runs a database action and reports whether it succeeded.
+    private suspend fun attempt(action: suspend () -> Unit): Boolean =
+        try {
+            action()
+            true
+        } catch (e: CancellationException) {
+            throw e   // cancellation is normal (user left the screen); never swallow it
+        } catch (e: Exception) {
+            false     // any real failure: tell the caller it did not work
+        }
 }
