@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- fragment_dashboard.xml: the home screen. A progress spinner shows until the data arrives,
      then the three summary cards appear. -->
+
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true">
@@ -141,6 +143,7 @@
 
             <Button
                 android:id="@+id/btnViewTenants"
+                app:icon="@drawable/ic_people"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
@@ -148,6 +151,7 @@
 
             <Button
                 android:id="@+id/btnAddTenantDashboard"
+                app:icon="@drawable/ic_add"
                 style="?attr/materialButtonOutlinedStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
