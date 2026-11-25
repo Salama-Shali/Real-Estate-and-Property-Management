@@ -24,33 +24,37 @@
 
 - Create, read, update and delete tenants
 - Input validation: empty fields, Kenyan phone numbers, optional email, due day (1 to 28), lease dates, and duplicate units
-- Error messages when saving or deleting fails
-- Lease tracking with an optional end date
-- Rent payments recorded per tenant
-- Daily rent reminder notification using WorkManager (rent due within 3 days)
-- Data stored on the device with Room, so it works without internet and survives closing the app
+- Smart rent reminder notifications: checks payment history to avoid reminding tenants who already paid
+- Direct tenant communication: Quick action buttons for Call, SMS, and WhatsApp with prefilled reminder templates
+- Search & Filter: Instant search by tenant name/unit, and filter by Due Soon or Month-to-Month
+- M-Pesa SMS Payment Parser: Auto-fills amount and M-Pesa transaction code from copied SMS receipt text
+- Payment Reports & CSV Export: Share financial reports as CSV
+- Maintenance Requests Tracking: Log and track maintenance issues per tenant
+- Property Management: Schema support for multi-property structures
+- Safe Room Database Migrations: Migration 1 to 2 preserving landlord data
+- Data stored on the device with Room, works without internet and survives app closing
 - Light and dark themes
 
 ## Architecture
 
 UI (Fragments) → ViewModel → Repository → DAO → Room database
 
-- `data`: entities, DAOs, database
+- `data`: entities (`Tenant`, `Payment`, `Property`, `MaintenanceRequest`), DAOs, database with Room Migration 1 -> 2
 - `repository`: single source of data for the ViewModels
 - `viewmodel`: screen state, survives rotation
 - `ui`: fragments and adapters
-- `util`: validation, lease status and reminder rules
+- `util`: validation, lease status, MPesa parser, report exporter, and reminder rules
 - `worker`: WorkManager reminder job
 
-Database tables: `tenants` and `payments` (a payment belongs to a tenant; deleting a tenant deletes their payments).
+Database tables: `tenants`, `payments`, `properties`, and `maintenance_requests`.
 
 ## Testing
 
-Over 40 unit tests cover the form validation rules and the rent reminder rule.
+49 unit tests and instrumented DB integration tests cover form validation rules, M-Pesa parsing, report generation, and payment-aware rent reminders.
 
 ## Technology
 
-Kotlin, Room, ViewModel and LiveData, Navigation Component, RecyclerView, WorkManager, Material Components.
+Kotlin, Room Database, ViewModel and LiveData, Navigation Component, RecyclerView, WorkManager, Material Components, AndroidX FileProvider.
 
 ## Team contributions
 
@@ -58,12 +62,11 @@ Kotlin, Room, ViewModel and LiveData, Navigation Component, RecyclerView, WorkMa
 |---------------|---|
 | Salama Shali  | (entities, DAOs, repositories, ViewModels), tenant list, dashboard, validation and tests, lease dates, rent reminders (WorkManager), theme and bottom navigation, error handling |
 | Juliet Nyakiamo | Add and edit tenant form, payments |
+| Open Source Contributor | Smart rent reminders (payment awareness), Call/SMS/WhatsApp communication shortcuts, Search & Filter chips, M-Pesa SMS payment parser, CSV payment report export, Property & Maintenance Request entities/DAOs/ViewModels, Room DB Migration 1->2, extended unit & instrumented tests |
 
 
-## limitations and future improvements
+## Limitations and Future Work
 
 - Single landlord per device (no login or accounts yet)
-- The reminder does not check whether the tenant already paid this month
 - Rent due days are limited to 1 to 28 so the date exists every month
-- The database resets if its version changes; a real app would use migrations
-- Future work: M-Pesa payment import, property listings, maintenance requests, tenant messaging
+- Future work: Cloud sync / backup, Multi-user landlord login

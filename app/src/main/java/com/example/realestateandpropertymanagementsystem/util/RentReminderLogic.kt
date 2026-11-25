@@ -39,4 +39,28 @@ object RentReminderLogic {
         daysInMonth: Int,
         windowDays: Int = REMINDER_WINDOW_DAYS
     ): Boolean = daysUntilDue(dueDay, today, daysInMonth) <= windowDays
+
+    // Checks if the total payment made this month covers or exceeds the expected rent.
+    fun isRentPaidForMonth(totalPaidThisMonth: Int, requiredRent: Int): Boolean =
+        totalPaidThisMonth >= requiredRent
+
+    // True when rent is due soon AND the tenant has not yet paid for the current month.
+    fun isDueSoonAndUnpaid(
+        dueDay: Int,
+        today: Int,
+        daysInMonth: Int,
+        isPaid: Boolean,
+        windowDays: Int = REMINDER_WINDOW_DAYS
+    ): Boolean = !isPaid && isDueSoon(dueDay, today, daysInMonth, windowDays)
+
+    // Calculates the timestamp in millis for 00:00:00 on the first day of the current month.
+    fun getStartOfMonthMillis(calendar: java.util.Calendar = java.util.Calendar.getInstance()): Long {
+        val cal = calendar.clone() as java.util.Calendar
+        cal.set(java.util.Calendar.DAY_OF_MONTH, 1)
+        cal.set(java.util.Calendar.HOUR_OF_DAY, 0)
+        cal.set(java.util.Calendar.MINUTE, 0)
+        cal.set(java.util.Calendar.SECOND, 0)
+        cal.set(java.util.Calendar.MILLISECOND, 0)
+        return cal.timeInMillis
+    }
 }
