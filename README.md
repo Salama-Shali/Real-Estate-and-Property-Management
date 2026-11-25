@@ -22,7 +22,7 @@
 
 ## Features 
 
--Create, read, update and delete tenants
+- Create, read, update and delete tenants
 - Input validation: empty fields, Kenyan phone numbers, optional email, due day (1 to 28), lease dates, and duplicate units
 - Error messages when saving or deleting fails
 - Lease tracking with an optional end date
