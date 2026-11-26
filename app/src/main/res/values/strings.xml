@@ -96,43 +96,6 @@
     <string name="greeting_evening">Good evening</string>
     <string name="error_save_failed">Could not save the tenant. Please try again.</string>
     <string name="error_delete_failed">Could not delete the tenant. Please try again.</string>
-
-    <!-- Communication Actions -->
-    <string name="action_call">Call</string>
-    <string name="action_sms">SMS</string>
-    <string name="action_whatsapp">WhatsApp</string>
-    <string name="sms_reminder_template">Hello %1$s, friendly reminder that rent of KES %2$,d for Unit %3$s is due on day %4$d of this month. Thank you!</string>
-
-    <!-- Search and Filter -->
-    <string name="search_hint">Search by name or unit…</string>
-    <string name="filter_all">All</string>
-    <string name="filter_due_soon">Due Soon</string>
-    <string name="filter_overdue">Overdue</string>
-    <string name="filter_month_to_month">Month-to-Month</string>
-
-    <!-- M-Pesa Parser -->
-    <string name="btn_paste_mpesa">Paste M-Pesa SMS</string>
-    <string name="hint_paste_mpesa">Paste M-Pesa SMS text here…</string>
-    <string name="mpesa_parsed_success">M-Pesa payment parsed successfully!</string>
-    <string name="mpesa_parse_error">Could not parse M-Pesa SMS format.</string>
-
-    <!-- Export Reports -->
-    <string name="btn_export_csv">Export CSV Report</string>
-    <string name="report_title">RentTrack Payments Report</string>
-    <string name="report_exported_success">Report created successfully!</string>
-
-    <!-- Properties -->
-    <string name="property_title">Properties</string>
-    <string name="add_property">Add Property</string>
-    <string name="hint_property_name">Property / Building Name</string>
-
-    <!-- Maintenance -->
-    <string name="maintenance_title">Maintenance Requests</string>
-    <string name="add_maintenance">Report Issue</string>
-    <string name="hint_maintenance_desc">Issue description (e.g. Broken tap)</string>
-    <string name="status_pending">Pending</string>
-    <string name="status_in_progress">In Progress</string>
-    <string name="status_resolved">Resolved</string>
 </resources>
 
     <!-- Text shown on each tenant row. %1$s / %1$d are placeholders filled in by code -->

@@ -48,19 +48,4 @@ class RentReminderLogicTest {
     fun dueInTenDays_isNotDueSoon() {
         assertFalse(RentReminderLogic.isDueSoon(dueDay = 25, today = 15, daysInMonth = 30))
     }
-
-    @Test
-    fun rentPaidForMonth_returnsTrueWhenPaidEqualOrMore() {
-        assertTrue(RentReminderLogic.isRentPaidForMonth(totalPaidThisMonth = 15000, requiredRent = 15000))
-        assertTrue(RentReminderLogic.isRentPaidForMonth(totalPaidThisMonth = 20000, requiredRent = 15000))
-        assertFalse(RentReminderLogic.isRentPaidForMonth(totalPaidThisMonth = 10000, requiredRent = 15000))
-    }
-
-    @Test
-    fun dueSoonAndUnpaid_returnsFalseIfAlreadyPaid() {
-        // Due today (due 15, today 15), but paid
-        assertFalse(RentReminderLogic.isDueSoonAndUnpaid(dueDay = 15, today = 15, daysInMonth = 30, isPaid = true))
-        // Due today, unpaid
-        assertTrue(RentReminderLogic.isDueSoonAndUnpaid(dueDay = 15, today = 15, daysInMonth = 30, isPaid = false))
-    }
 }

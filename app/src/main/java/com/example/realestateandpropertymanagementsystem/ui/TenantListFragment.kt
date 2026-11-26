@@ -40,8 +40,6 @@ class TenantListFragment : Fragment() {
         return binding.root
     }
 
-    private var fullTenantList: List<Tenant> = emptyList()
-
     //connect the list and start observing the data
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -63,22 +61,10 @@ class TenantListFragment : Fragment() {
 
         // Observe the LiveData
         viewModel.allTenants.observe(viewLifecycleOwner) { tenants ->
-            fullTenantList = tenants
-            applyFilterAndSearch()
+            adapter.submitList(tenants)
+            //show the message only when there is nothing to list
+            binding.tvEmpty.visibility = if (tenants.isEmpty()) View.VISIBLE else View.GONE
         }
-
-        binding.etSearch.addTextChangedListener(object : android.text.TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                applyFilterAndSearch()
-            }
-            override fun afterTextChanged(s: android.text.Editable?) {}
-        })
-
-        binding.chipGroupFilter.setOnCheckedStateChangeListener { _, _ ->
-            applyFilterAndSearch()
-        }
-
         // Open the Add Tenant form when the + button is tapped
         binding.fabAdd.setOnClickListener {
             findNavController().navigate(R.id.action_tenantListFragment_to_addTenantFragment)
@@ -88,34 +74,6 @@ class TenantListFragment : Fragment() {
             ReminderScheduler.checkNow(requireContext())
             Snackbar.make(binding.root, R.string.reminder_check_started, Snackbar.LENGTH_SHORT).show()
         }
-    }
-
-    private fun applyFilterAndSearch() {
-        val query = binding.etSearch.text.toString().trim().lowercase()
-        val checkedChipId = binding.chipGroupFilter.checkedChipId
-
-        val today = java.util.Calendar.getInstance()
-        val dayOfMonth = today.get(java.util.Calendar.DAY_OF_MONTH)
-        val daysInMonth = today.getActualMaximum(java.util.Calendar.DAY_OF_MONTH)
-
-        val filtered = fullTenantList.filter { tenant ->
-            val matchesSearch = query.isEmpty() ||
-                    tenant.name.lowercase().contains(query) ||
-                    tenant.unit.lowercase().contains(query)
-
-            val matchesFilter = when (checkedChipId) {
-                R.id.chipFilterDueSoon -> com.example.realestateandpropertymanagementsystem.util.RentReminderLogic.isDueSoon(
-                    tenant.rentDueDay, dayOfMonth, daysInMonth
-                )
-                R.id.chipFilterMonthToMonth -> tenant.leaseEndDate == null
-                else -> true
-            }
-
-            matchesSearch && matchesFilter
-        }
-
-        adapter.submitList(filtered)
-        binding.tvEmpty.visibility = if (filtered.isEmpty()) View.VISIBLE else View.GONE
     }
 
 

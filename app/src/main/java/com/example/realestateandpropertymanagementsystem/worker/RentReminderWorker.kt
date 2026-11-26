@@ -34,23 +34,19 @@ class RentReminderWorker(
 ) : CoroutineWorker(context, params) {
 
     override suspend fun doWork(): Result {
-        // 1. Get the active tenants and payment DAO from the database.
-        val db = AppDatabase.getDatabase(applicationContext)
-        val tenants = TenantRepository(db.tenantDao()).getActiveTenants()
-        val paymentDao = db.paymentDao()
+        // 1. Get the active tenants from the database (UI isn't involved here).
+        val dao = AppDatabase.getDatabase(applicationContext).tenantDao()
+        val tenants = TenantRepository(dao).getActiveTenants()
 
-        // 2. Today's day of the month, how many days this month has, and start of current month.
+        // 2. Today's day of the month, and how many days this month has.
         val today = Calendar.getInstance()
         val dayOfMonth = today.get(Calendar.DAY_OF_MONTH)
         val daysInMonth = today.getActualMaximum(Calendar.DAY_OF_MONTH)
-        val startOfMonth = RentReminderLogic.getStartOfMonthMillis(today)
 
-        // 3. Keep only tenants whose rent is due today or within the reminder window AND haven't paid yet.
-        val dueSoon = tenants.filter { tenant ->
-            val paymentsThisMonth = paymentDao.getPaymentsForTenantSince(tenant.id, startOfMonth)
-            val totalPaid = paymentsThisMonth.sumOf { it.amount }
-            val isPaid = RentReminderLogic.isRentPaidForMonth(totalPaid, tenant.rent)
-            RentReminderLogic.isDueSoonAndUnpaid(tenant.rentDueDay, dayOfMonth, daysInMonth, isPaid)
+        // 3. Keep only tenants whose rent is due today or within the next few days.
+        //    The rule itself lives in RentReminderLogic (unit tested).
+        val dueSoon = tenants.filter {
+            RentReminderLogic.isDueSoon(it.rentDueDay, dayOfMonth, daysInMonth)
         }
 
         // 4. Tell the landlord, but only if there is something to report.

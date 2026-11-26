@@ -27,10 +27,6 @@ class DashboardFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val viewModel: TenantViewModel by viewModels()
-    private val paymentViewModel: com.example.realestateandpropertymanagementsystem.viewmodel.PaymentViewModel by viewModels()
-
-    private var currentTenants: List<Tenant> = emptyList()
-    private var currentPayments: List<com.example.realestateandpropertymanagementsystem.data.Payment> = emptyList()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -53,24 +49,10 @@ class DashboardFragment : Fragment() {
             findNavController().navigate(R.id.action_dashboardFragment_to_addTenantFragment)
         }
 
-        binding.btnExportCsv.setOnClickListener {
-            val tenantsMap = currentTenants.associateBy { it.id }
-            com.example.realestateandpropertymanagementsystem.util.ReportExporter.shareCsvReport(
-                requireContext(),
-                tenantsMap,
-                currentPayments
-            )
-        }
-
         // Runs now and again every time the tenants table changes,
         // so the numbers update by themselves.
         viewModel.allTenants.observe(viewLifecycleOwner) { tenants ->
-            currentTenants = tenants
             showStats(tenants)
-        }
-
-        paymentViewModel.allPayments.observe(viewLifecycleOwner) { payments ->
-            currentPayments = payments
         }
     }
     // Sets the greeting from the phone's clock

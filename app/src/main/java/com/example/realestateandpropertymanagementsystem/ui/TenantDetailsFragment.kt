@@ -31,7 +31,6 @@ class TenantDetailsFragment : Fragment() {
 
     private val tenantViewModel: TenantViewModel by viewModels()
     private val paymentViewModel: PaymentViewModel by viewModels()
-    private val maintenanceViewModel: com.example.realestateandpropertymanagementsystem.viewmodel.MaintenanceViewModel by viewModels()
 
     private var tenantId = -1
     private val dateFormat = SimpleDateFormat("dd MMM yyyy", Locale.getDefault())
@@ -73,7 +72,6 @@ class TenantDetailsFragment : Fragment() {
             )
         }
         binding.btnRecordPayment.setOnClickListener { showPaymentDialog() }
-        binding.btnReportIssue.setOnClickListener { showReportIssueDialog() }
     }
 
     private fun showTenant(tenant: Tenant) {
@@ -96,43 +94,6 @@ class TenantDetailsFragment : Fragment() {
         }
         binding.tvLeaseStatus.text = LeaseStatus.label(requireContext(), tenant.leaseEndDate)
         binding.tvLeaseStatus.setTextColor(LeaseStatus.color(requireContext(), tenant.leaseEndDate))
-
-        setupCommunicationActions(tenant)
-    }
-
-    private fun setupCommunicationActions(tenant: Tenant) {
-        val phoneNumber = tenant.phone.trim()
-        val reminderMessage = getString(
-            R.string.sms_reminder_template,
-            tenant.name,
-            tenant.rent,
-            tenant.unit,
-            tenant.rentDueDay
-        )
-
-        binding.btnCall.setOnClickListener {
-            val intent = android.content.Intent(android.content.Intent.ACTION_DIAL, android.net.Uri.parse("tel:$phoneNumber"))
-            startActivity(intent)
-        }
-
-        binding.btnSms.setOnClickListener {
-            val intent = android.content.Intent(android.content.Intent.ACTION_VIEW, android.net.Uri.parse("sms:$phoneNumber")).apply {
-                putExtra("sms_body", reminderMessage)
-            }
-            startActivity(intent)
-        }
-
-        binding.btnWhatsApp.setOnClickListener {
-            try {
-                val cleanPhone = phoneNumber.replace("+", "").replace(" ", "").replace("-", "")
-                val formattedPhone = if (cleanPhone.startsWith("0")) "254" + cleanPhone.substring(1) else cleanPhone
-                val url = "https://api.whatsapp.com/send?phone=$formattedPhone&text=${android.net.Uri.encode(reminderMessage)}"
-                val intent = android.content.Intent(android.content.Intent.ACTION_VIEW, android.net.Uri.parse(url))
-                startActivity(intent)
-            } catch (e: Exception) {
-                Toast.makeText(requireContext(), "WhatsApp is not installed", Toast.LENGTH_SHORT).show()
-            }
-        }
     }
 
     // Pop-up to record a payment. Stays open if the amount is invalid.
@@ -145,18 +106,6 @@ class TenantDetailsFragment : Fragment() {
             .setNegativeButton(R.string.cancel, null)
             .create()
         dialog.show()
-
-        dialogBinding.btnParseMPesa.setOnClickListener {
-            val text = dialogBinding.etMPesaSms.text.toString()
-            val parsed = com.example.realestateandpropertymanagementsystem.util.MPesaParser.parse(text)
-            if (parsed != null) {
-                if (parsed.amount != null) dialogBinding.etAmount.setText(parsed.amount.toString())
-                if (parsed.formattedNote.isNotEmpty()) dialogBinding.etNote.setText(parsed.formattedNote)
-                Toast.makeText(requireContext(), R.string.mpesa_parsed_success, Toast.LENGTH_SHORT).show()
-            } else {
-                Toast.makeText(requireContext(), R.string.mpesa_parse_error, Toast.LENGTH_SHORT).show()
-            }
-        }
 
         dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
             val amount = dialogBinding.etAmount.text.toString().trim().toIntOrNull()
@@ -175,30 +124,6 @@ class TenantDetailsFragment : Fragment() {
             Toast.makeText(requireContext(), R.string.payment_saved, Toast.LENGTH_SHORT).show()
             dialog.dismiss()
         }
-    }
-
-    private fun showReportIssueDialog() {
-        val input = android.widget.EditText(requireContext()).apply {
-            hint = getString(R.string.hint_maintenance_desc)
-            setPadding(32, 16, 32, 16)
-        }
-        MaterialAlertDialogBuilder(requireContext())
-            .setTitle(R.string.add_maintenance)
-            .setView(input)
-            .setPositiveButton(R.string.save) { _, _ ->
-                val desc = input.text.toString().trim()
-                if (desc.isNotEmpty()) {
-                    maintenanceViewModel.insert(
-                        com.example.realestateandpropertymanagementsystem.data.MaintenanceRequest(
-                            tenantId = tenantId,
-                            description = desc
-                        )
-                    )
-                    Toast.makeText(requireContext(), "Maintenance issue logged", Toast.LENGTH_SHORT).show()
-                }
-            }
-            .setNegativeButton(R.string.cancel, null)
-            .show()
     }
 
     override fun onDestroyView() {

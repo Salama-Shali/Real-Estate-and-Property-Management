@@ -14,12 +14,9 @@ class PaymentViewModel(application: Application) : AndroidViewModel(application)
 
     private val repository: PaymentRepository
 
-    val allPayments: LiveData<List<Payment>>
-
     init {
         val dao = AppDatabase.getDatabase(application).paymentDao()
         repository = PaymentRepository(dao)
-        allPayments = repository.allPayments
     }
 
     // The UI observes this to show one tenant's payment history.

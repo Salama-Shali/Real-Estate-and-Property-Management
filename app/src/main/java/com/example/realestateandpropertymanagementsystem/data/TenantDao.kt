@@ -11,9 +11,9 @@ import androidx.room.Update
 @Dao
 interface TenantDao {
 
-    // Saves a new tenant record and returns the generated row ID.
+    // Saves a new tenant record.
     @Insert
-    suspend fun insertTenant(tenant: Tenant): Long
+    suspend fun insertTenant(tenant: Tenant)
 
     // Retrieves all tenants, ordered by name.
     @Query("SELECT * FROM tenants ORDER BY name ASC")

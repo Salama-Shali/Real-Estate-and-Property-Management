@@ -7,33 +7,9 @@
     android:paddingTop="8dp">
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/tilMPesa"
-        style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/hint_paste_mpesa">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/etMPesaSms"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textMultiLine"
-            android:maxLines="3" />
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <Button
-        android:id="@+id/btnParseMPesa"
-        style="@style/Widget.Material3.Button.OutlinedButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:text="@string/btn_paste_mpesa" />
-
-    <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/tilAmount"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
         android:hint="@string/hint_amount">
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/etAmount"
@@ -43,7 +19,6 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/tilNote"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
